@@ -1,0 +1,3 @@
+rootProject.name='SoundTouch'
+include ':app'
+include ':soundtouchlib'
