@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">SoundTouch</string>
+
+    <string name="app_name">SoundTouch Example</string>
+    <string name="hello_world">Hello world!</string>
 </resources>
