@@ -4,7 +4,7 @@
 # Sets the minimum version of CMake required to build the native library.
 cmake_minimum_required(VERSION 3.4.1)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -fvisibility=hidden -fdata-sections -ffunction-sections")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 c++11 c++14 -Wall -fvisibility=hidden -fdata-sections -ffunction-sections")
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -12,6 +12,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -fvisibility=hidden -fdata-se
 # Gradle automatically packages shared libraries with your APK.
 
 include_directories(soundtouch/include)
+include_directories(utils)
 
 add_library( # Sets the name of the library.
         soundtouch
@@ -35,6 +36,7 @@ add_library( # Sets the name of the library.
         soundtouch/TDStretch.cpp
         soundtouch/WavFile.cpp
         soundtouch-jni.cpp
+        utils/jvm.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

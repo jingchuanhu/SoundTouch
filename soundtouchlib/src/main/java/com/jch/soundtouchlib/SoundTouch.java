@@ -11,6 +11,8 @@
 
 package com.jch.soundtouchlib;
 
+import java.nio.ByteBuffer;
+
 public final class SoundTouch
 {
 
@@ -33,6 +35,8 @@ public final class SoundTouch
     private native final int processFile(long handle, String inputFile, String outputFile);
 
     public native final static String getErrorString();
+
+    public native final void writeData(ByteBuffer byteBuffer, int byteSize);
 
     private native final static long newInstance();
 
