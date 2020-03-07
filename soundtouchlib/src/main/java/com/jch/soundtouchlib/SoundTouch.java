@@ -11,13 +11,19 @@
 
 package com.jch.soundtouchlib;
 
-public final class SoundTouch
+import java.nio.ByteBuffer;
+
+public class SoundTouch
 {
 
     // Load the native library upon startup
     static
     {
         System.loadLibrary("soundtouch");
+    }
+
+    interface SoundTouchCallBack{
+        void onProcessedData(ByteBuffer byteBuffer);
     }
 
     // Native interface function that returns SoundTouch version string.
@@ -34,18 +40,18 @@ public final class SoundTouch
 
     public native final static String getErrorString();
 
+    public native final void processData(ByteBuffer byteBuffer, int byteSize, SoundTouchCallBack callBack);
+
     private native final static long newInstance();
 
     private native final void deleteInstance(long handle);
 
     long handle = 0;
 
-
     public SoundTouch()
     {
         handle = newInstance();
     }
-
 
     public void close()
     {

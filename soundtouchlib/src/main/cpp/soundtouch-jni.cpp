@@ -13,6 +13,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "utils/scopted_java_ref.h"
+
 using namespace std;
 
 #include "SoundTouch.h"
@@ -94,6 +96,7 @@ static int _init_threading(bool warn)
 // Processes the sound file
 static void _processFile(SoundTouch *pSoundTouch, const char *inFileName, const char *outFileName)
 {
+    JavaRef<SoundTouch> *test;
     int nSamples;
     int nChannels;
     int buffSizeSamples;
@@ -250,9 +253,17 @@ extern "C" DLL_PUBLIC int Java_com_jch_soundtouchlib_SoundTouch_processFile(JNIE
         return -1;
     }
 
-
 	env->ReleaseStringUTFChars(jinputFile, inputFile);
 	env->ReleaseStringUTFChars(joutputFile, outputFile);
 
 	return 0;
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_SoundTouch_processData(JNIEnv *env, jobject thiz, jobject byte_buffer,
+                                                jint byte_size, jobject callBackObj) {
+
+    
+    // TODO: implement writeData()
+
 }
