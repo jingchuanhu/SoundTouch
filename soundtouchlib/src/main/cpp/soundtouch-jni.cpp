@@ -253,7 +253,6 @@ extern "C" DLL_PUBLIC int Java_com_jch_soundtouchlib_SoundTouch_processFile(JNIE
         return -1;
     }
 
-
 	env->ReleaseStringUTFChars(jinputFile, inputFile);
 	env->ReleaseStringUTFChars(joutputFile, outputFile);
 
@@ -261,7 +260,10 @@ extern "C" DLL_PUBLIC int Java_com_jch_soundtouchlib_SoundTouch_processFile(JNIE
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_jch_soundtouchlib_SoundTouch_writeData(JNIEnv *env, jobject thiz, jobject byte_buffer,
-                                                jint byte_size) {
+Java_com_jch_soundtouchlib_SoundTouch_processData(JNIEnv *env, jobject thiz, jobject byte_buffer,
+                                                jint byte_size, jobject callBackObj) {
+
+    
     // TODO: implement writeData()
+
 }
