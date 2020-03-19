@@ -23,8 +23,11 @@ public class SoundTouch
     }
 
     interface SoundTouchCallBack{
-        void onProcessedData(ByteBuffer byteBuffer);
+        void onProcessedData();
     }
+
+    private ByteBuffer swapBuffer;
+    private int swapBufferSize;
 
     // Native interface function that returns SoundTouch version string.
     // This invokes the native c++ routine defined in "soundtouch-jni.cpp".
@@ -40,9 +43,16 @@ public class SoundTouch
 
     public native final static String getErrorString();
 
-    public native final void processData(ByteBuffer byteBuffer, int byteSize, SoundTouchCallBack callBack);
+//    public native final void processData(long handle, ByteBuffer byteBuffer, int byteSize, SoundTouchCallBack callBack);
 
     private native final static long newInstance();
+
+    /**
+     * 初始化参数
+     * @param channels
+     * @param sampleRate
+     */
+//    private native final void initAudioParam(long handle, int channels, int sampleRate);
 
     private native final void deleteInstance(long handle);
 
@@ -77,9 +87,22 @@ public class SoundTouch
         setSpeed(handle, speed);
     }
 
-
     public int processFile(String inputFile, String outputFile)
     {
         return processFile(handle, inputFile, outputFile);
     }
+
+    public void processData(ByteBuffer dataBuffer, int bufferSize){
+        this.swapBuffer = dataBuffer;
+        this.swapBufferSize = bufferSize;
+    }
+
+    private class MySoundTouchCallBack implements SoundTouchCallBack{
+
+        @Override
+        public void onProcessedData() {
+
+        }
+    }
+
 }

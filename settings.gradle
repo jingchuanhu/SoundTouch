@@ -1,3 +1,4 @@
 rootProject.name='SoundTouch'
 include ':app'
 include ':soundtouchlib'
+include ':soundtouchdemo'
