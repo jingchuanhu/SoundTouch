@@ -9,12 +9,14 @@
 #include "SoundTouch.h"
 #include <jni.h>
 #include <syslog.h>
+#include <string>
 #include <android/log.h>
 
 #define LOGV(TAG, ...)   __android_log_print((int)ANDROID_LOG_INFO, TAG, __VA_ARGS__)
 
-
 extern "C" {
+
+    const static char * _TAG_ ="JchSoundTouch";
 
 namespace jch {
     using namespace soundtouch;
@@ -24,19 +26,14 @@ namespace jch {
 
     public:
 
-        explicit JchSoundTouch(const JavaParamRef<jobject> &callBack) : channels_(1),
+        explicit JchSoundTouch(const ScopedJavaLocalRef<jobject> &callBack) : channels_(1),
                                                                         sampleRate_(8000),
                                                                         director_buffer_address_(
                                                                                 nullptr),
                                                                         processCallback_(
-                                                                                callBack.obj()),
+                                                                                callBack),
                                                                         soundTouch_(
-                                                                                new SoundTouch()),
-                                                                        errorMsg_(
-                                                                                nullptr) {
-            jch::AttachCurrentThreadIfNeeded();
-            jclass clazz = jch::GetEnv()->GetObjectClass(processCallback_.obj());
-            processMethodId_ = jch::GetEnv()->GetMethodID(clazz, "onProcessed", "(I)V");
+                                                                                new SoundTouch()){
         };
 
         const char *GetVersion();
@@ -77,7 +74,7 @@ namespace jch {
         int channels_;
         int sampleRate_;
         void *director_buffer_address_;
-        JavaParamRef<jobject> processCallback_;
+        ScopedJavaGlobalRef<jobject> processCallback_;
         jmethodID processMethodId_;
         int director_buffer_capacity_in_bytes_;
         SoundTouch *soundTouch_;

@@ -7,12 +7,78 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:id="@+id/tv_speed"
+        android:text="speed : "
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:2.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/et_speed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        style="@style/style_main_setting_tv" />
+
+    <EditText
+        android:id="@+id/et_speed"
+        app:layout_constraintLeft_toRightOf="@id/tv_speed"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintDimensionRatio="h,1:5"
+        android:text="1.0"
+        app:layout_constraintBottom_toBottomOf="@id/tv_speed"
+        style="@style/style_main_setting_et" />
+
+    <TextView
+        android:id="@+id/tv_swmpo"
+        android:text="swmpo : "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:2.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/et_speed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4"
+        style="@style/style_main_setting_tv" />
+
+    <EditText
+        android:id="@+id/et_swmpo"
+        app:layout_constraintLeft_toRightOf="@id/tv_swmpo"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="1.0"
+        app:layout_constraintDimensionRatio="h,1:5"
+        app:layout_constraintBottom_toBottomOf="@id/tv_swmpo"
+        style="@style/style_main_setting_et" />
+
+    <TextView
+        android:id="@+id/tv_pitch"
+        android:text="pitch : "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:2.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/et_pitch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        style="@style/style_main_setting_tv" />
+
+    <EditText
+        android:id="@+id/et_pitch"
+        app:layout_constraintLeft_toRightOf="@id/tv_pitch"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="1.0"
+        app:layout_constraintDimensionRatio="h,1:5"
+        app:layout_constraintBottom_toBottomOf="@id/tv_pitch"
+        style="@style/style_main_setting_et" />
+
+    <Button
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:text="SOUND TOUCH"
+        android:textSize="18sp"
+        android:id="@+id/btn_sound"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.7"
+        app:layout_constraintDimensionRatio="h,1:4"
+        android:layout_height="50dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

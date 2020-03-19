@@ -22,7 +22,7 @@ JNIEXPORT jlong JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeGetInstance(JNIEnv *env, jclass clazz,
                                                            jobject callback) {
     // TODO: implement getInstance()
-    jch::JavaParamRef<jobject> callbackRef(callback);
+    jch::ScopedJavaLocalRef<jobject> callbackRef(env,jch::JavaParamRef<jobject >(callback));
     return reinterpret_cast<long>(new jch::JchSoundTouch(callbackRef));
 }
 
@@ -68,8 +68,11 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeCacheBuffer(JNIEnv *env, jobject 
 }
 
 JNIEXPORT jint JNICALL
-Java_com_jch_soundtouchlib_JchSoundTouch_processData(JNIEnv *env, jobject thiz, jlong handle) {
-    return reinterpret_cast<jch::JchSoundTouch *>(handle)->ProcessData();
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeProcessData(JNIEnv *env, jobject thiz, jlong handle) {
+    LOGV(_TAG_, "nativeProcessData");
+    reinterpret_cast<jch::JchSoundTouch *>(handle)->ProcessData();
+    LOGV(_TAG_, "nativeProcessData end");
+    return 0;
 }
 
 JNIEXPORT jstring JNICALL
@@ -79,11 +82,11 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeGetErrorMsg(JNIEnv *env, jobject 
 }
 
 JNIEXPORT void JNICALL
-Java_com_jch_soundtouchlib_JchSoundTouch_flush(JNIEnv *env, jobject thiz, jlong handle) {
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeFlush(JNIEnv *env, jobject thiz, jlong handle) {
     reinterpret_cast<jch::JchSoundTouch*>(handle)->flush();
 }
 JNIEXPORT void JNICALL
-Java_com_jch_soundtouchlib_JchSoundTouch_release(JNIEnv *env, jobject thiz, jlong handle) {
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeRelease(JNIEnv *env, jobject thiz, jlong handle) {
 
     delete(((jch::JchSoundTouch*)handle));
 }
