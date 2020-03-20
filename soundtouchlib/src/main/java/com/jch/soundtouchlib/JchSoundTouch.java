@@ -1,6 +1,5 @@
 package com.jch.soundtouchlib;
 
-import java.lang.annotation.Native;
 import java.nio.ByteBuffer;
 
 public class JchSoundTouch {
@@ -63,6 +62,10 @@ public class JchSoundTouch {
         nativeSetSpeed(nativeInstance, speed);
     }
 
+    public void dumpFile(String fileName){
+        nativeDumpFile(nativeInstance, fileName);
+    }
+
     public void setTempo(float tempo){
         nativeSetTempo(nativeInstance, tempo);
     }
@@ -76,14 +79,14 @@ public class JchSoundTouch {
     }
 
     public String getVersion(){
-        return nativegGetVersion(nativeInstance);
+        return nativeGetVersion(nativeInstance);
     }
 
     public void flush(){
         nativeFlush(nativeInstance);
     }
 
-    public void realse(){
+    public void release(){
         nativeRelease(nativeInstance);
     }
 
@@ -94,9 +97,11 @@ public class JchSoundTouch {
     private native void nativeSetTempo(long handle, float tempo);
     private native String nativeGetErrorMsg(long handle);
     private native void nativeSetPitchSemiTones(long handle, float pitch);
-    private native String nativegGetVersion(long handle);
+    private native String nativeGetVersion(long handle);
     private native void nativeCacheBuffer(long handle, ByteBuffer buffer);
     private native int nativeProcessData(long handle);
     private native void nativeFlush(long handle);
     private native void nativeRelease(long handle);
+
+    private native void nativeDumpFile(long handle, String outFileName);
 }

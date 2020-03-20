@@ -43,16 +43,8 @@ public class SoundTouch
 
     public native final static String getErrorString();
 
-//    public native final void processData(long handle, ByteBuffer byteBuffer, int byteSize, SoundTouchCallBack callBack);
 
     private native final static long newInstance();
-
-    /**
-     * 初始化参数
-     * @param channels
-     * @param sampleRate
-     */
-//    private native final void initAudioParam(long handle, int channels, int sampleRate);
 
     private native final void deleteInstance(long handle);
 

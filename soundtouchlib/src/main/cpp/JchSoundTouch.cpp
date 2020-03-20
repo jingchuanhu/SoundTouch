@@ -38,14 +38,15 @@ namespace jch {
 
     int JchSoundTouch::ProcessData(short *buf, size_t samples, size_t bufferSize) {
 
-        LOGV(_TAG_, "ProcessData before putSamples");
         soundTouch_->putSamples(buf, samples);
-        LOGV(__FILE__, "after putSamples");
         int processSamples = 0;
         try {
             do {
 
                 processSamples = soundTouch_->receiveSamples(buf, samples);
+
+                dumpData(buf, processSamples);
+
                 LOGV(_TAG_, "processSamples num: %d", processSamples);
                 OnProcessedData(buf, processSamples);       // todo  由于数据不全导致存在脏数据？
             } while (processSamples != 0);
@@ -79,6 +80,7 @@ namespace jch {
         size_t samples = shortBufSize / channels_;
         do {
             processSamples = soundTouch_->receiveSamples(buf, samples);
+            dumpData(buf,processSamples);
             OnProcessedData(buf, processSamples);       // todo  由于数据不全导致存在脏数据？
         } while (processSamples != 0);
 
@@ -102,6 +104,30 @@ namespace jch {
 
     const std::string JchSoundTouch::GetErrorStr() {
         return errorMsg_;
+    }
+
+    bool JchSoundTouch::setDumpFile(const std::string &file) {
+        dump_ = true;
+        try {
+            wavOutFile_ = new WavOutFile(file.c_str(), sampleRate_, audioFormat_*8, channels_);
+        }catch (const std::runtime_error &e){
+            errorMsg_ = e.what();
+            LOGV(_TAG_, "dumpFile error:%s", e.what());
+            return false;
+        }
+
+        return true;
+    }
+
+    int JchSoundTouch::dumpData(short *buf, int samples) {
+
+        if (!dump_){
+            return 0;
+        }
+
+        wavOutFile_->write(buf, samples);
+
+        return 0;
     }
 
 

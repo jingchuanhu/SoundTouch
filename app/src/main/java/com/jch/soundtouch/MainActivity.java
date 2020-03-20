@@ -90,16 +90,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (arg0.getId())
         {
-            case R.id.buttonSelectSrcFile:
-            case R.id.buttonSelectOutFile:
+            case R.id.buttonSelectSrcFile:{
+
+
+            }
+            case R.id.buttonSelectOutFile: {
                 // one of the file select buttons clicked ... we've not just implemented them ;-)
                 Toast.makeText(this, "File selector not implemented, sorry! Enter the file path manually ;-)", Toast.LENGTH_LONG).show();
                 break;
-
-            case R.id.buttonProcess:
+            }
+            case R.id.buttonProcess: {
                 // button "process" pushed
                 process();
                 break;
+            }
         }
 
     }

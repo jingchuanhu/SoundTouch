@@ -54,8 +54,8 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetPitchSemiTones(JNIEnv *env, jo
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_jch_soundtouchlib_JchSoundTouch_nativegGetVersion(JNIEnv *env, jobject thiz,
-                                                           jlong handle) {
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeGetVersion(JNIEnv *env, jobject thiz,
+                                                          jlong handle) {
     const char *version = reinterpret_cast<jch::JchSoundTouch *>(handle)->GetVersion();
     return env->NewStringUTF(version);
 }
@@ -85,12 +85,19 @@ JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeFlush(JNIEnv *env, jobject thiz, jlong handle) {
     reinterpret_cast<jch::JchSoundTouch*>(handle)->flush();
 }
+
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeDumpFile(JNIEnv *env, jobject thiz, jlong handle, jstring out_file_name) {
+
+    const std::string fileName = env->GetStringUTFChars(out_file_name, JNI_FALSE);
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->setDumpFile(fileName);
+    env->ReleaseStringUTFChars(out_file_name, fileName.c_str());
+}
+
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeRelease(JNIEnv *env, jobject thiz, jlong handle) {
 
-    delete(((jch::JchSoundTouch*)handle));
+    delete ((jch::JchSoundTouch*)handle);
 }
-
-
 
 }

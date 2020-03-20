@@ -11,12 +11,13 @@
 #include <syslog.h>
 #include <string>
 #include <android/log.h>
+#include "soundtouch/WavFile.h"
 
 #define LOGV(TAG, ...)   __android_log_print((int)ANDROID_LOG_INFO, TAG, __VA_ARGS__)
 
 extern "C" {
 
-    const static char * _TAG_ ="JchSoundTouch";
+const static char *_TAG_ = "JchSoundTouch";
 
 namespace jch {
     using namespace soundtouch;
@@ -27,16 +28,17 @@ namespace jch {
     public:
 
         explicit JchSoundTouch(const ScopedJavaLocalRef<jobject> &callBack) : channels_(1),
-                                                                        sampleRate_(8000),
-                                                                        director_buffer_address_(
-                                                                                nullptr),
-                                                                        processCallback_(
-                                                                                callBack),
-                                                                        soundTouch_(
-                                                                                new SoundTouch()){
+                                                                              sampleRate_(48000),
+                                                                              director_buffer_address_(nullptr),
+                                                                              processCallback_(callBack),
+                                                                              soundTouch_(new SoundTouch()),
+                                                                              dump_(false),
+                                                                              audioFormat_(sizeof(short)){
         };
 
         const char *GetVersion();
+
+        bool setDumpFile(const std::string &file);
 
         void SetTempo(float tempo);
 
@@ -57,6 +59,7 @@ namespace jch {
         void flush();
 
         ~JchSoundTouch() {
+            delete wavOutFile_;
             LOGV("JchSoundTouch", "release");
         }
 
@@ -71,14 +74,19 @@ namespace jch {
 
         void OnProcessedData(short *buf, size_t samples);
 
+        int dumpData(short* buf, int samples);
+
         int channels_;
         int sampleRate_;
+        int audioFormat_;
         void *director_buffer_address_;
         ScopedJavaGlobalRef<jobject> processCallback_;
         jmethodID processMethodId_;
         int director_buffer_capacity_in_bytes_;
         SoundTouch *soundTouch_;
         std::string errorMsg_;
+        bool dump_;
+        WavOutFile *wavOutFile_;
 
     };
 

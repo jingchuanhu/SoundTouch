@@ -154,12 +154,6 @@ static void _processFile(SoundTouch *pSoundTouch, const char *inFileName, const 
     } while (nSamples != 0);
 }
 
-static void _processData(SoundTouch *pSouchTouch, int channels, int sampleRate, SAMPLETYPE* sampleBuffer, size_t bufferSizeSamples){
-
-
-
-}
-
 extern "C" DLL_PUBLIC jstring Java_com_jch_soundtouchlib_SoundTouch_getVersionString(JNIEnv *env,
                                                                                      jclass thiz)
 {
@@ -262,27 +256,4 @@ extern "C" DLL_PUBLIC int Java_com_jch_soundtouchlib_SoundTouch_processFile(JNIE
 
 	return 0;
 }
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_jch_soundtouchlib_SoundTouch_processData(JNIEnv *env, jobject thiz, jlong handle, jobject byte_buffer,
-                                                jint byte_size, jobject callBackObj) {
 
-
-
-    // TODO: implement writeData()
-
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_jch_soundtouchlib_SoundTouch_initAudioParam(JNIEnv *env, jobject thiz, jlong handle, jint channels,
-                                                     jint sample_rate) {
-
-    SoundTouch* soundTouch = (SoundTouch*)handle;
-    __sample_rate = sample_rate;
-    __channels = channels;
-    soundTouch->setChannels(channels);
-    soundTouch->setSampleRate(sample_rate);
-
-    // TODO: implement initAudioParam()
-}

@@ -36,7 +36,7 @@ add_library( # Sets the name of the library.
         soundtouch/TDStretch.cpp
         soundtouch/WavFile.cpp
         jchSoundTouch-jni.cpp
-#        soundtouch-jni.cpp
+        soundtouch-jni.cpp
         JchSoundTouch.cpp
         utils/jvm.cpp
         )

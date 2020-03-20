@@ -9,11 +9,14 @@ import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import com.jch.soundtouchlib.JchSoundTouch;
 
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.JchSoundTouchCallback {
 
@@ -30,24 +33,16 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     AudioRecord audioRecord;
     LocalAudioTrack mAudioTrack;
     private AppRTCAudioManager appRTCAudioManager;
-//    AudioTrack audioTrack;
 
     @Override
     public void init(Context context, float speed, float pitch, float tempo) {
         this.context = context;
         starting = false;
-        soundTouch = new JchSoundTouch(channel, sampleRate, this);
-//        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-//        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+        initSoundTouch();
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION, sampleRate, channel, audioFormate, bufferSizeInByte);
         Log.d(TAG, "init: " + audioRecord.getState());
         mAudioTrack = new LocalAudioTrack(context);
         mAudioTrack.init(sampleRate, channel);
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            audioTrack = createAudioTrackOnLollipopOrHigher(sampleRate, channel, bufferSizeInByte);
-//        } else {
-//            audioTrack = createAudioTrackOnLowerThanLollipop(sampleRate, channel, bufferSizeInByte);
-//        }
         appRTCAudioManager = AppRTCAudioManager.create(context, new Runnable() {
             @Override
             public void run() {
@@ -93,7 +88,7 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
 //        audioTrack.release();
         mAudioTrack.release();
         audioRecord.release();
-        soundTouch.realse();
+        soundTouch.release();
     }
 
     private class AudioThread extends Thread {
@@ -124,7 +119,6 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
 
             audioRecord.stop();
             mAudioTrack.stop();
-//            audioTrack.stop();
 
         }
     }
@@ -133,7 +127,15 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     public void onProcessed(int bufferSize) {
         Log.d(TAG, "onProcessed: " + bufferSize);
         mAudioTrack.playByte(dataBuf);
-//        writeBytes(audioTrack, dataBuf, bufferSizeInByte);
+    }
+
+    private void initSoundTouch(){
+        soundTouch = new JchSoundTouch(channel, sampleRate, this);
+        String musicPath = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmss");
+        String filePath = musicPath+"/"+"ST-"+sdf.format(new Date())+".wav";
+        Log.d(TAG, "initSoundTouch: dump file " + filePath);
+//        soundTouch.dumpFile(filePath);
     }
 
     private int writeBytes(AudioTrack audioTrack, ByteBuffer byteBuffer, int sizeInBytes) {

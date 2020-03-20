@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private static final String[] MANDATORY_PERMISSIONS = {
             Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
     public interface ViewPresent {
@@ -165,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             if (grantResults[i] == PackageManager.PERMISSION_DENIED)
                 unGrantedPermissions.add(permissions[i]);
         }
+
+
         for (String permission : unGrantedPermissions) {
             if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
                 finish();
