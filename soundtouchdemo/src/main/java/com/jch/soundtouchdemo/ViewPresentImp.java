@@ -1,9 +1,7 @@
 package com.jch.soundtouchdemo;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -16,7 +14,6 @@ import android.util.Log;
 import com.jch.soundtouchlib.JchSoundTouch;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 
 public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.JchSoundTouchCallback {
 
@@ -32,6 +29,7 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     private ByteBuffer dataBuf;
     AudioRecord audioRecord;
     LocalAudioTrack mAudioTrack;
+    private AppRTCAudioManager appRTCAudioManager;
 //    AudioTrack audioTrack;
 
     @Override
@@ -50,7 +48,13 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
 //        } else {
 //            audioTrack = createAudioTrackOnLowerThanLollipop(sampleRate, channel, bufferSizeInByte);
 //        }
+        appRTCAudioManager = AppRTCAudioManager.create(context, new Runnable() {
+            @Override
+            public void run() {
 
+            }
+        });
+        appRTCAudioManager.setAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
         setPitch(pitch);
         setSpeed(speed);
         setTempo(tempo);
@@ -85,7 +89,7 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
 
     @Override
     public void release() {
-
+        appRTCAudioManager.close();
 //        audioTrack.release();
         mAudioTrack.release();
         audioRecord.release();
@@ -101,7 +105,6 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
                 audioRecord.startRecording();
             }
             mAudioTrack.start();
-            mAudioTrack.enableSpeakerPhone(true);
 
             dataBuf = ByteBuffer.allocateDirect(bufferSizeInByte);
             soundTouch.attachDataBuffer(dataBuf);
