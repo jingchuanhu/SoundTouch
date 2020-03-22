@@ -85,7 +85,6 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     @Override
     public void release() {
         appRTCAudioManager.close();
-//        audioTrack.release();
         mAudioTrack.release();
         audioRecord.release();
         soundTouch.release();
@@ -126,7 +125,7 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     @Override
     public void onProcessed(int bufferSize) {
         Log.d(TAG, "onProcessed: " + bufferSize);
-        mAudioTrack.playByte(dataBuf);
+//        mAudioTrack.playByte(dataBuf);
     }
 
     private void initSoundTouch(){
@@ -135,7 +134,7 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
         SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmss");
         String filePath = musicPath+"/"+"ST-"+sdf.format(new Date())+".wav";
         Log.d(TAG, "initSoundTouch: dump file " + filePath);
-//        soundTouch.dumpFile(filePath);
+        soundTouch.dumpFile(filePath);
     }
 
     private int writeBytes(AudioTrack audioTrack, ByteBuffer byteBuffer, int sizeInBytes) {

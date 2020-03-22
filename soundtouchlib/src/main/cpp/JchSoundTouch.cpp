@@ -124,9 +124,8 @@ namespace jch {
         if (!dump_){
             return 0;
         }
-
+        LOGV(_TAG_, "dump data %d", samples );
         wavOutFile_->write(buf, samples);
-
         return 0;
     }
 

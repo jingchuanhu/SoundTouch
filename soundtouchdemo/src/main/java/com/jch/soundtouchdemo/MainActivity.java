@@ -3,6 +3,7 @@ package com.jch.soundtouchdemo;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -160,20 +162,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         for (int i = 0; i < permissions.length; i++) {
-            if (grantResults[i] == PackageManager.PERMISSION_DENIED)
-                unGrantedPermissions.add(permissions[i]);
-        }
-
-
-        for (String permission : unGrantedPermissions) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                shouldShowRequestPermissionRationale(permissions[i]);
                 finish();
-            } else ActivityCompat.requestPermissions(this, new String[]{permission}, 0);
+            }else {
+                unGrantedPermissions.remove(permissions[i]);
+            }
         }
+
         if (unGrantedPermissions.size() == 0) {
             viewPresent.init(getApplicationContext(), Float.valueOf(etSwmpo.getText().toString()),
                     Float.valueOf(etSpeed.getText().toString()),
