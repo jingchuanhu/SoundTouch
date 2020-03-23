@@ -31,6 +31,12 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetChannels(JNIEnv *env, jobject 
                                                            jint channels) {
     reinterpret_cast<jch::JchSoundTouch *>(handle)->SetChannels(channels);
 }
+
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetAudioFormat(JNIEnv *env, jobject thiz, jlong handle, jint audio_format) {
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->SetAudioFormat(audio_format);
+}
+
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetSampleRte(JNIEnv *env, jobject thiz, jlong handle,
                                                             jint sample_rte) {
@@ -67,6 +73,13 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeCacheBuffer(JNIEnv *env, jobject 
             buffer));
 }
 
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativePlayFile(JNIEnv *env, jobject thiz, jlong handle, jstring file) {
+    std::string fileStr = env->GetStringUTFChars(file, JNI_FALSE);
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->PlayFile(fileStr);
+    env->ReleaseStringUTFChars(file,fileStr.c_str());
+}
+
 JNIEXPORT jint JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeProcessData(JNIEnv *env, jobject thiz, jlong handle) {
     LOGV(_TAG_, "nativeProcessData");
@@ -83,7 +96,7 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeGetErrorMsg(JNIEnv *env, jobject 
 
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeFlush(JNIEnv *env, jobject thiz, jlong handle) {
-    reinterpret_cast<jch::JchSoundTouch*>(handle)->flush();
+    reinterpret_cast<jch::JchSoundTouch *>(handle)->Flush();
 }
 
 JNIEXPORT void JNICALL

@@ -144,7 +144,7 @@ static void _processFile(SoundTouch *pSoundTouch, const char *inFileName, const 
         } while (nSamples != 0);
     }
 
-    // Now the input file is processed, yet 'flush' few last samples that are
+    // Now the input file is processed, yet 'Flush' few last samples that are
     // hiding in the SoundTouch's internal processing pipeline.
     pSoundTouch->flush();
     do

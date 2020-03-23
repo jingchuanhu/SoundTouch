@@ -36,7 +36,7 @@ public class LocalAudioTrack {
         this.channels = channels;
 
         int minBufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRate, channelCountToConfiguration(channels), AudioFormat.ENCODING_PCM_16BIT);
-        audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, sampleRate, channelCountToConfiguration(channels), AudioFormat.ENCODING_PCM_16BIT, minBufferSizeInBytes, AudioTrack.MODE_STREAM);
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelCountToConfiguration(channels), AudioFormat.ENCODING_PCM_16BIT, minBufferSizeInBytes, AudioTrack.MODE_STREAM);
     }
 
     public void start() {
@@ -70,25 +70,29 @@ public class LocalAudioTrack {
         audioManager.setSpeakerphoneOn(speakerPhone);            //扬声器播放
     }
 
-    public void playByte(ByteBuffer buffer) {
-
+    public void playByte(ByteBuffer buffer, int size){
         if (!isAlive) {
             return;
         }
         buffer.rewind();
 
-        int sizeInBytes = buffer.capacity();
+//        int sizeInBytes = buffer.capacity();
 
         int bytesWritten = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            bytesWritten = writeOnLollipop(audioTrack, buffer, sizeInBytes);
+            bytesWritten = writeOnLollipop(audioTrack, buffer, size);
         } else {
-            bytesWritten = writePreLollipop(audioTrack, buffer, sizeInBytes);
+            bytesWritten = writePreLollipop(audioTrack, buffer, size);
         }
 
-        if (bytesWritten != sizeInBytes) {
+        if (bytesWritten != size) {
             Log.e(TAG, "AudioTrack.write failed: " + bytesWritten);
         }
+    }
+
+    public void playByte(ByteBuffer buffer) {
+
+        playByte(buffer, buffer.capacity());
 
     }
 

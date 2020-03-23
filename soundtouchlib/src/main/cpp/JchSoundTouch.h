@@ -50,13 +50,17 @@ namespace jch {
 
         void SetSampleRate(int sampleRate);
 
+        void SetAudioFormat(int audioFormat);
+
         void CacheDirectBuffer(JNIEnv *env, const JavaParamRef<jobject> &byte_buffer);
 
         int ProcessData();
 
+        int PlayFile(const std::string &fileName);
+
         const std::string GetErrorStr();
 
-        void flush();
+        void Flush();
 
         ~JchSoundTouch() {
             delete wavOutFile_;
@@ -79,6 +83,7 @@ namespace jch {
         int channels_;
         int sampleRate_;
         int audioFormat_;
+        std::string fileStr_;
         void *director_buffer_address_;
         ScopedJavaGlobalRef<jobject> processCallback_;
         jmethodID processMethodId_;

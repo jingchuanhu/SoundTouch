@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener , View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     EditText etPitch;
     @BindView(R.id.btn_sound)
     Button btnSound;
+    @BindView(R.id.btn_play_file)
+    Button btnPlayFile;
 
     private ArrayList<String> unGrantedPermissions;
 
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         void stopSoundTouch();
 
+        void playAssertFile(String fileName);
+
         void release();
     }
 
@@ -77,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         viewPresent = new ViewPresentImp();
 //        viewPresent.init(getApplicationContext());
         btnSound.setOnTouchListener(this);
+        btnPlayFile.setOnClickListener(this);
         etPitch.addTextChangedListener(new MyTextWatcher(etPitch.getId()));
         etSpeed.addTextChangedListener(new MyTextWatcher(etSpeed.getId()));
         etSwmpo.addTextChangedListener(new MyTextWatcher(etSwmpo.getId()));
@@ -122,20 +127,25 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.d(TAG, "afterTextChanged: " + s.toString());
 
             //todo checking the ability for the ability of et converting to float from edit
+            float value = checkFloat(s.toString());
+
             switch (viewId) {
 
                 case R.id.et_pitch: {
-                    viewPresent.setPitch(Float.valueOf(s.toString()));
+                    if (value != -100)
+                        viewPresent.setPitch(value);
                     break;
                 }
 
                 case R.id.et_speed: {
-                    viewPresent.setSpeed(Float.valueOf(s.toString()));
+                    if (value != -100)
+                        viewPresent.setSpeed(value);
                     break;
                 }
 
                 case R.id.et_swmpo: {
-                    viewPresent.setTempo(Float.valueOf(s.toString()));
+                    if (value != -100)
+                        viewPresent.setTempo(value);
                     break;
                 }
                 default: {
@@ -143,6 +153,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
             }
         }
+    }
+
+    private float checkFloat(String str) {
+        float result = 0;
+
+        try {
+            result = Float.valueOf(str);
+        } catch (NumberFormatException e) {
+            return result = -100;
+        }
+
+        return result;
     }
 
     private void checkPermissions() {
@@ -171,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 shouldShowRequestPermissionRationale(permissions[i]);
                 finish();
-            }else {
+            } else {
                 unGrantedPermissions.remove(permissions[i]);
             }
         }
@@ -182,4 +204,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Float.valueOf(etPitch.getText().toString()));
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_play_file:{
+                viewPresent.playAssertFile("text_wav.wav");
+
+            }
+        }
+    }
+
+
 }

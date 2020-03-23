@@ -4,6 +4,7 @@
 
 #include "JchSoundTouch.h"
 #include <stdexcept>
+#include <zconf.h>
 
 namespace jch {
 
@@ -17,6 +18,10 @@ namespace jch {
         soundTouch_->setSampleRate(sampleRate);
     }
 
+    void JchSoundTouch::SetAudioFormat(int audioFormat) {
+        audioFormat_ = audioFormat;
+    }
+
     void JchSoundTouch::CacheDirectBuffer(JNIEnv *env,
                                           const jch::JavaParamRef<jobject> &byte_buffer) {
         director_buffer_address_ = env->GetDirectBufferAddress(byte_buffer.obj());
@@ -27,25 +32,25 @@ namespace jch {
         processMethodId_ = jch::AttachCurrentThreadIfNeeded()->GetMethodID(clazz, "onProcessed", "(I)V");
     }
 
+
     int JchSoundTouch::ProcessData() {
         LOGV(_TAG_, "ProcessData");
         short *buf = static_cast<int16_t *>(director_buffer_address_);  // byteArray -> shortArray
-        size_t shortBufSize = director_buffer_capacity_in_bytes_ / sizeof(int16_t);
+        size_t shortBufSize = director_buffer_capacity_in_bytes_ / audioFormat_;
         size_t samples = shortBufSize / channels_;
-        return ProcessData(buf, shortBufSize, samples);
+        return ProcessData(buf, samples, director_buffer_capacity_in_bytes_);
     }
 
 
     int JchSoundTouch::ProcessData(short *buf, size_t samples, size_t bufferSize) {
 
+        LOGV(_TAG_, __func__);
         soundTouch_->putSamples(buf, samples);
         int processSamples = 0;
         try {
             do {
 
                 processSamples = soundTouch_->receiveSamples(buf, samples);
-
-                dumpData(buf, processSamples);
 
                 LOGV(_TAG_, "processSamples num: %d", processSamples);
                 OnProcessedData(buf, processSamples);       // todo  由于数据不全导致存在脏数据？
@@ -64,23 +69,59 @@ namespace jch {
 
     void JchSoundTouch::OnProcessedData(short *buf, size_t samples) {
         LOGV("JchSoundTouch", "OnProcessedData after putSamples");
-        memcpy(director_buffer_address_, buf, samples * sizeof(int16_t));
+        size_t  proccesedSize = samples * audioFormat_* channels_;
+        memcpy(director_buffer_address_, buf, proccesedSize);
 
-        jch::AttachCurrentThreadIfNeeded()->CallVoidMethod(processCallback_.obj(), processMethodId_, director_buffer_capacity_in_bytes_);
+        dumpData(static_cast<short *>(director_buffer_address_), samples);
+        jch::AttachCurrentThreadIfNeeded()->CallVoidMethod(processCallback_.obj(), processMethodId_, proccesedSize);
         LOGV("JchSoundTouch", "OnProcessedData after putSamples end");
 
     }
 
-    void JchSoundTouch::flush() {
+    int JchSoundTouch::PlayFile(const std::string &fileName) {
+
+        // open input file
+        fileStr_ = fileName;
+        WavInFile inFile(fileName.c_str());
+        sampleRate_ = inFile.getSampleRate();
+        audioFormat_ = inFile.getNumBits() >> 3;
+        channels_ = inFile.getNumChannels();
+        int bufSampleSize = director_buffer_capacity_in_bytes_ / (channels_*audioFormat_);
+        try {
+            while (inFile.eof() == 0) {
+                int readSamples;
+                if (audioFormat_ == 1) {
+                    readSamples = inFile.read(static_cast<unsigned char *>(director_buffer_address_), bufSampleSize);
+                } else if(audioFormat_ == 2){
+                    readSamples = inFile.read(static_cast<short *>(director_buffer_address_), bufSampleSize);
+                } else if(audioFormat_ == 4){
+                    readSamples = inFile.read(static_cast<float *>(director_buffer_address_), bufSampleSize);
+                }
+
+                ProcessData(static_cast<short *>(director_buffer_address_), readSamples, director_buffer_capacity_in_bytes_);
+            }
+
+            Flush();
+        }catch (const std::runtime_error &e){
+            errorMsg_ = e.what();
+            LOGV(_TAG_, "play file error : %s", e.what());
+            return -1;
+        }
+
+        return 0;
+    }
+
+    void JchSoundTouch::Flush() {
+        LOGV(_TAG_, __func__);
         soundTouch_->flush();
 
         int processSamples = 0;
         int16_t *buf = static_cast<int16_t *>(director_buffer_address_);  // byteArray -> shortArray
-        size_t shortBufSize = director_buffer_capacity_in_bytes_ / sizeof(int16_t);
+        size_t shortBufSize = director_buffer_capacity_in_bytes_ / audioFormat_;
         size_t samples = shortBufSize / channels_;
         do {
             processSamples = soundTouch_->receiveSamples(buf, samples);
-            dumpData(buf,processSamples);
+            dumpData(buf, processSamples);
             OnProcessedData(buf, processSamples);       // todo  由于数据不全导致存在脏数据？
         } while (processSamples != 0);
 
@@ -109,8 +150,8 @@ namespace jch {
     bool JchSoundTouch::setDumpFile(const std::string &file) {
         dump_ = true;
         try {
-            wavOutFile_ = new WavOutFile(file.c_str(), sampleRate_, audioFormat_*8, channels_);
-        }catch (const std::runtime_error &e){
+            wavOutFile_ = new WavOutFile(file.c_str(), sampleRate_, audioFormat_ * 8, channels_);
+        } catch (const std::runtime_error &e) {
             errorMsg_ = e.what();
             LOGV(_TAG_, "dumpFile error:%s", e.what());
             return false;
@@ -121,13 +162,12 @@ namespace jch {
 
     int JchSoundTouch::dumpData(short *buf, int samples) {
 
-        if (!dump_){
+        if (!dump_) {
             return 0;
         }
-        LOGV(_TAG_, "dump data %d", samples );
+        LOGV(_TAG_, "dump data %d", samples);
         wavOutFile_->write(buf, samples);
         return 0;
     }
-
 
 }

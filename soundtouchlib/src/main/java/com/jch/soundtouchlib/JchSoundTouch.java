@@ -1,8 +1,21 @@
 package com.jch.soundtouchlib;
 
+import android.media.AudioFormat;
+
 import java.nio.ByteBuffer;
 
 public class JchSoundTouch {
+
+    public enum AudioFormat{
+
+        PCM_BIT8(1),PCM_BIT16(2), PCM_BIT32(4);
+
+        private int value;
+
+        private AudioFormat(int value) {
+            this.value = value;
+        }
+    }
 
     static {
         System.loadLibrary("soundtouch");
@@ -44,6 +57,10 @@ public class JchSoundTouch {
         nativeCacheBuffer(nativeInstance, dataBuf);
     }
 
+    public void playFile(String file){
+        nativePlayFile(nativeInstance, file);
+    }
+
     public void setBufSize(int bufSize) {
         this.bufSize = bufSize;
     }
@@ -51,6 +68,10 @@ public class JchSoundTouch {
     public void setChannels(int channels) {
         this.channels = channels;
         nativeSetChannels(nativeInstance, channels);
+    }
+
+    public void setAudioFormat(AudioFormat audioFormat){
+        nativeSetAudioFormat(nativeInstance, audioFormat.value);
     }
 
     public void setSampleRte(int sampleRte) {
@@ -93,12 +114,14 @@ public class JchSoundTouch {
     private native static long nativeGetInstance(JchSoundTouchCallback callback);
     private native void nativeSetChannels(long handle, int channels);
     private native void nativeSetSampleRte(long handle, int sampleRte);
+    private native void nativeSetAudioFormat(long handle, int audioFormat);
     private native void nativeSetSpeed(long handle, float speed);
     private native void nativeSetTempo(long handle, float tempo);
     private native String nativeGetErrorMsg(long handle);
     private native void nativeSetPitchSemiTones(long handle, float pitch);
     private native String nativeGetVersion(long handle);
     private native void nativeCacheBuffer(long handle, ByteBuffer buffer);
+    private native void nativePlayFile(long handle, String file);
     private native int nativeProcessData(long handle);
     private native void nativeFlush(long handle);
     private native void nativeRelease(long handle);

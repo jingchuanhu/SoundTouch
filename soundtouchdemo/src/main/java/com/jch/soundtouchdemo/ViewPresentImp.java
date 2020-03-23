@@ -14,6 +14,10 @@ import android.util.Log;
 
 import com.jch.soundtouchlib.JchSoundTouch;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +28,7 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     private Context context;
     private JchSoundTouch soundTouch;
     private int channel = 1;
-    private int sampleRate = 48000;
+    private int sampleRate = 44100;
     private int audioFormate = AudioFormat.ENCODING_PCM_16BIT;
     private int bufferSizeInByte = 1024;
     private boolean starting;
@@ -83,6 +87,27 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     }
 
     @Override
+    public void playAssertFile(final String fileName) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String file = copyFile(fileName);
+
+                    Log.d(TAG, file);
+                    dataBuf = ByteBuffer.allocateDirect(bufferSizeInByte);
+                    soundTouch.attachDataBuffer(dataBuf);
+                    mAudioTrack.start();
+                    soundTouch.playFile(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    @Override
     public void release() {
         appRTCAudioManager.close();
         mAudioTrack.release();
@@ -125,11 +150,15 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
     @Override
     public void onProcessed(int bufferSize) {
         Log.d(TAG, "onProcessed: " + bufferSize);
-//        mAudioTrack.playByte(dataBuf);
+        mAudioTrack.playByte(dataBuf, bufferSize);
     }
 
     private void initSoundTouch(){
         soundTouch = new JchSoundTouch(channel, sampleRate, this);
+        dumpSoundTouchFile();
+    }
+
+    private void dumpSoundTouchFile(){
         String musicPath = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath();
         SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmss");
         String filePath = musicPath+"/"+"ST-"+sdf.format(new Date())+".wav";
@@ -179,5 +208,28 @@ public class ViewPresentImp implements MainActivity.ViewPresent, JchSoundTouch.J
         return new AudioTrack(AudioManager.STREAM_VOICE_CALL, sampleRateInHz, channelConfig,
                 AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes, AudioTrack.MODE_STREAM);
     }
+
+    private String copyFile(String file) throws IOException {
+
+        InputStream is = context.getAssets().open(file);
+
+        String copyPath = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+        String outPath = copyPath+"/"+file;
+        File outFile = new File(outPath);
+        outFile.deleteOnExit();
+        FileOutputStream fos = new FileOutputStream(outFile);
+        byte[] buffer = new byte[1024];
+        int num = 0;
+        while ((num = is.read(buffer)) != -1){
+            fos.write(buffer, 0, num);
+        }
+
+        fos.flush();
+        is.close();
+        fos.close();
+
+        return outPath;
+    }
+
 
 }
