@@ -27,8 +27,8 @@
         style="@style/style_main_setting_et" />
 
     <TextView
-        android:id="@+id/tv_swmpo"
-        android:text="swmpo : "
+        android:id="@+id/tv_tempo"
+        android:text="tempo : "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="h,1:2.5"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,12 +38,12 @@
         style="@style/style_main_setting_tv" />
 
     <EditText
-        android:id="@+id/et_swmpo"
-        app:layout_constraintLeft_toRightOf="@id/tv_swmpo"
+        android:id="@+id/et_tempo"
+        app:layout_constraintLeft_toRightOf="@id/tv_tempo"
         app:layout_constraintRight_toRightOf="parent"
         android:text="1.0"
         app:layout_constraintDimensionRatio="h,1:5"
-        app:layout_constraintBottom_toBottomOf="@id/tv_swmpo"
+        app:layout_constraintBottom_toBottomOf="@id/tv_tempo"
         style="@style/style_main_setting_et" />
 
     <TextView

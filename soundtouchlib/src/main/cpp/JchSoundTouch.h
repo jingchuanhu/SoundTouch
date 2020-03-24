@@ -34,6 +34,7 @@ namespace jch {
                                                                               soundTouch_(new SoundTouch()),
                                                                               dump_(false),
                                                                               audioFormat_(sizeof(short)){
+            soundTouch_->setSetting(SETTING_USE_AA_FILTER, 1);
         };
 
         const char *GetVersion();
@@ -42,15 +43,29 @@ namespace jch {
 
         void SetTempo(float tempo);
 
+        void SetTempoChange(double newTempo);
+
+        void SetPitch(double newPitch);
+
         void SetPitchSemiTones(float pitch);
 
-        void SetSpeed(float speed);
+        void SetPitchOctaves(double newPitch);
+
+        void SetRate(float speed);
+
+        void SetRateChange(double newRate);
 
         void SetChannels(int channels);
 
         void SetSampleRate(int sampleRate);
 
         void SetAudioFormat(int audioFormat);
+
+        void EnableAAFilter(bool enable);
+
+        void SetAAFilterLength(int length);
+
+        void EnableQuickSeek(bool enable);
 
         void CacheDirectBuffer(JNIEnv *env, const JavaParamRef<jobject> &byte_buffer);
 

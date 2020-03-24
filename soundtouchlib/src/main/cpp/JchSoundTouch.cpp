@@ -139,8 +139,36 @@ namespace jch {
         soundTouch_->setPitchSemiTones(pitch);
     }
 
-    void JchSoundTouch::SetSpeed(float speed) {
+    void JchSoundTouch::SetRate(float speed) {
         soundTouch_->setRate(speed);
+    }
+
+    void JchSoundTouch::SetTempoChange(double newTempo) {
+        soundTouch_->setTempoChange(newTempo);
+    }
+
+    void JchSoundTouch::SetPitch(double newPitch) {
+        soundTouch_->setPitch(newPitch);
+    }
+
+    void JchSoundTouch::SetPitchOctaves(double newPitch) {
+        soundTouch_->setPitchOctaves(newPitch);
+    }
+
+    void JchSoundTouch::SetRateChange(double newRate) {
+        soundTouch_->setRateChange(newRate);
+    }
+
+    void JchSoundTouch::EnableAAFilter(bool enable) {
+        soundTouch_->setSetting(SETTING_USE_AA_FILTER, enable?1: 0);
+    }
+
+    void JchSoundTouch::SetAAFilterLength(int length) {
+        soundTouch_->setSetting(SETTING_AA_FILTER_LENGTH, length);
+    }
+
+    void JchSoundTouch::EnableQuickSeek(bool enable) {
+        soundTouch_->setSetting(SETTING_USE_QUICKSEEK, enable?1:0);
     }
 
     const std::string JchSoundTouch::GetErrorStr() {
@@ -169,5 +197,4 @@ namespace jch {
         wavOutFile_->write(buf, samples);
         return 0;
     }
-
 }

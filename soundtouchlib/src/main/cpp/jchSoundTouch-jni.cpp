@@ -44,9 +44,9 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetSampleRte(JNIEnv *env, jobject
 }
 
 JNIEXPORT void JNICALL
-Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetSpeed(JNIEnv *env, jobject thiz, jlong handle,
-                                                        jfloat speed) {
-    reinterpret_cast<jch::JchSoundTouch*>(handle)->SetSpeed(speed);
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetRate(JNIEnv *env, jobject thiz, jlong handle,
+                                                       jfloat speed) {
+    reinterpret_cast<jch::JchSoundTouch *>(handle)->SetRate(speed);
 }
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetTempo(JNIEnv *env, jobject thiz, jlong handle,
@@ -57,6 +57,31 @@ JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetPitchSemiTones(JNIEnv *env, jobject thiz,
                                                                  jlong handle, jfloat pitch) {
     reinterpret_cast<jch::JchSoundTouch*>(handle)->SetPitchSemiTones(pitch);
+}
+
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetRateChange(JNIEnv *env, jobject thiz, jlong handle, jfloat new_rate) {
+    // TODO: implement nativeSetRateChange()
+}
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetTempoChange(JNIEnv *env, jobject thiz, jlong handle, jfloat tempo) {
+    // TODO: implement nativeSetTempoChange()
+}
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetPitchOctaves(JNIEnv *env, jobject thiz, jlong handle, jfloat pitch) {
+    // TODO: implement nativeSetPitchOctaves()
+}
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeEnableAAFilter(JNIEnv *env, jobject thiz, jlong handle, jboolean enable) {
+    // TODO: implement nativeEnableAAFilter()
+}
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetAAFilterLength(JNIEnv *env, jobject thiz, jlong handle, jint length) {
+    // TODO: implement nativeSetAAFilterLength()
+}
+JNIEXPORT void JNICALL
+Java_com_jch_soundtouchlib_JchSoundTouch_nativeEnableQuickSeek(JNIEnv *env, jobject thiz, jlong handle, jboolean enable) {
+    // TODO: implement nativeEnableQuickSeek()
 }
 
 JNIEXPORT jstring JNICALL

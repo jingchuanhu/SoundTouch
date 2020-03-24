@@ -1,7 +1,5 @@
 package com.jch.soundtouchlib;
 
-import android.media.AudioFormat;
-
 import java.nio.ByteBuffer;
 
 public class JchSoundTouch {
@@ -80,7 +78,7 @@ public class JchSoundTouch {
     }
 
     public void setSpeed(float speed){
-        nativeSetSpeed(nativeInstance, speed);
+        nativeSetRate(nativeInstance, speed);
     }
 
     public void dumpFile(String fileName){
@@ -111,12 +109,42 @@ public class JchSoundTouch {
         nativeRelease(nativeInstance);
     }
 
+    public void setRateChange(float newRate){
+        nativeSetRateChange(nativeInstance, newRate);
+    }
+
+    public void setTempChange(float newTempo){
+        nativeSetTempoChange(nativeInstance, newTempo);
+    }
+
+    public void setPitchOctaves(float pitch){
+        nativeSetPitchOctaves(nativeInstance, pitch);
+    }
+
+    public void enableAAFilter(boolean enable){
+        nativeEnableAAFilter(nativeInstance, enable);
+    }
+
+    public void setAAFilterLength(int length){
+        nativeSetAAFilterLength(nativeInstance, length);
+    }
+
+    public void enableQuickSeek(boolean enable){
+        nativeEnableQuickSeek(nativeInstance, enable);
+    }
+
     private native static long nativeGetInstance(JchSoundTouchCallback callback);
     private native void nativeSetChannels(long handle, int channels);
     private native void nativeSetSampleRte(long handle, int sampleRte);
     private native void nativeSetAudioFormat(long handle, int audioFormat);
-    private native void nativeSetSpeed(long handle, float speed);
+    private native void nativeSetRate(long handle, float speed);
+    private native void nativeSetRateChange(long handle, float newRate);
     private native void nativeSetTempo(long handle, float tempo);
+    private native void nativeSetTempoChange(long handle, float tempo);
+    private native void nativeSetPitchOctaves(long handle, float pitch);
+    private native void nativeEnableAAFilter(long handle, boolean enable);
+    private native void nativeSetAAFilterLength(long handle, int length);
+    private native void nativeEnableQuickSeek(long handle, boolean enable);
     private native String nativeGetErrorMsg(long handle);
     private native void nativeSetPitchSemiTones(long handle, float pitch);
     private native String nativeGetVersion(long handle);
@@ -125,6 +153,5 @@ public class JchSoundTouch {
     private native int nativeProcessData(long handle);
     private native void nativeFlush(long handle);
     private native void nativeRelease(long handle);
-
     private native void nativeDumpFile(long handle, String outFileName);
 }

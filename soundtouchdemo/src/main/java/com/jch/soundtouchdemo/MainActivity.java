@@ -3,6 +3,7 @@ package com.jch.soundtouchdemo;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.media.audiofx.AudioEffect;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @BindView(R.id.et_speed)
     EditText etSpeed;
-    @BindView(R.id.et_swmpo)
+    @BindView(R.id.et_tempo)
     EditText etSwmpo;
     @BindView(R.id.et_pitch)
     EditText etPitch;
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         init();
     }
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     break;
                 }
 
-                case R.id.et_swmpo: {
+                case R.id.et_tempo: {
                     if (value != -100)
                         viewPresent.setTempo(value);
                     break;

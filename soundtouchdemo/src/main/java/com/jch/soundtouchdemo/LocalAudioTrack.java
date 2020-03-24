@@ -77,7 +77,9 @@ public class LocalAudioTrack {
         buffer.rewind();
 
 //        int sizeInBytes = buffer.capacity();
-
+        buffer.position(0);
+        buffer.rewind();
+//        buffer.flip();
         int bytesWritten = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             bytesWritten = writeOnLollipop(audioTrack, buffer, size);
