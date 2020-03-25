@@ -61,27 +61,27 @@ Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetPitchSemiTones(JNIEnv *env, jo
 
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetRateChange(JNIEnv *env, jobject thiz, jlong handle, jfloat new_rate) {
-    // TODO: implement nativeSetRateChange()
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->SetRateChange(new_rate);
 }
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetTempoChange(JNIEnv *env, jobject thiz, jlong handle, jfloat tempo) {
-    // TODO: implement nativeSetTempoChange()
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->SetTempoChange(tempo);
 }
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetPitchOctaves(JNIEnv *env, jobject thiz, jlong handle, jfloat pitch) {
-    // TODO: implement nativeSetPitchOctaves()
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->SetPitchOctaves(pitch);
 }
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeEnableAAFilter(JNIEnv *env, jobject thiz, jlong handle, jboolean enable) {
-    // TODO: implement nativeEnableAAFilter()
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->EnableAAFilter(enable);
 }
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeSetAAFilterLength(JNIEnv *env, jobject thiz, jlong handle, jint length) {
-    // TODO: implement nativeSetAAFilterLength()
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->SetAAFilterLength(length);
 }
 JNIEXPORT void JNICALL
 Java_com_jch_soundtouchlib_JchSoundTouch_nativeEnableQuickSeek(JNIEnv *env, jobject thiz, jlong handle, jboolean enable) {
-    // TODO: implement nativeEnableQuickSeek()
+    reinterpret_cast<jch::JchSoundTouch*>(handle)->EnableQuickSeek(enable);
 }
 
 JNIEXPORT jstring JNICALL
